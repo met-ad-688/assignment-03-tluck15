@@ -1,7 +1,7 @@
 ---
 title: Assignment 03
 author:
-  - name: Norah Jones
+  - name: Taylor Luckenbill
     affiliations:
       - id: bu
         name: Boston University
