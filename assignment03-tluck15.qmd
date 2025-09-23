@@ -14,12 +14,10 @@ format:
     theme: cerulean
     toc: true
     toc-depth: 2
+  docx: default
+  pdf: default
 date-modified: today
 date-format: long
-execute:
-  echo: false
-  eval: false
-  freeze: auto
 jupyter: python3
 ---
 
@@ -50,9 +48,9 @@ df = spark.read.option("header", "true").option("inferSchema", "true").option("m
 df.createOrReplaceTempView("job_postings")
 
 # Show Schema and Sample Data
-print("---This is Diagnostic check, No need to print it in the final doc---")
+#print("---This is Diagnostic check, No need to print it in the final doc---")
 
-df.printSchema() # comment this line when rendering the submission
+#df.printSchema() # comment this line when rendering the submission
 df.show(5)
 ```
 
