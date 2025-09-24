@@ -93,6 +93,10 @@ df = df.withColumn("Average Salary",(col("SALARY_FROM")+col("SALARY_TO"))/2)
 ```
 
 ```{python}
+print(df.columns) 
+```
+
+```{python}
 #parse
 export_cols = [
     "EDUCATION_LEVELS_NAME",
@@ -102,6 +106,10 @@ export_cols = [
     "LOT_V6_SPECIALIZED_OCCUPATION_NAME"
 ]
 
+
+```
+
+```{python}
 df_selected = df.select(*export_cols)
 ```
 
