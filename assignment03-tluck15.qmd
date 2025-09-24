@@ -97,12 +97,21 @@ print(df.columns)
 ```
 
 ```{python}
+from pyspark.sql.functions import regexp_replace, col
+
+df = df.withColumn(
+    "EDUCATION_LEVELS_NAME",
+    regexp_replace(col("EDUCATION_LEVELS_NAME"), "[\n\r]", "")  
+)
+```
+
+```{python}
 #parse
 export_cols = [
     "EDUCATION_LEVELS_NAME",
     "REMOTE_TYPE_NAME",
     "MAX_YEARS_EXPERIENCE",
-    "Average_ Salary",
+    "Average Salary",
     "LOT_V6_SPECIALIZED_OCCUPATION_NAME"
 ]
 
@@ -110,6 +119,13 @@ export_cols = [
 ```
 
 ```{python}
-df_selected = df.select(*export_cols)
+df_selected = df.select(export_cols)
+df_selected.show(10)
+```
+
+```{python}
+pdf = df_selected.toPandas()
+pdf.to_csv("./data/lighthouse_cleaned.csv", index=False)
+print(len(pdf))
 ```
 
