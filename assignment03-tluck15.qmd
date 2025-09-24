@@ -129,3 +129,27 @@ pdf.to_csv("./data/lighthouse_cleaned.csv", index=False)
 print(len(pdf))
 ```
 
+```{python}
+median_salaries = pdf.groupby("LOT_V6_SPECIALIZED_OCCUPATION_NAME")["Average Salary"].median()
+```
+
+```{python}
+sorted_employment_types = median_salaries.sort_values(ascending=False).index
+```
+
+```{python}
+pdf["LOT_V6_SPECIALIZED_OCCUPATION_NAME"] = pd.Categorical(
+    pdf["LOT_V6_SPECIALIZED_OCCUPATION_NAME"],
+    categories=sorted_employment_types,
+    ordered=True
+)
+```
+
+```{python}
+fig = px.box(
+    pdf,
+    x="LOT_V6_SPECIALIZED_OCCUPATION_NAME",
+    y="Average Salary"
+)
+```
+
