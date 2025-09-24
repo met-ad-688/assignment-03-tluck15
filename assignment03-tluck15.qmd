@@ -81,3 +81,27 @@ median_salary = compute_median(df, "SALARY")
 print("medians: ", median_from, median_to, median_salary)
 ```
 
+```{python}
+df = df.fillna({
+    "SALARY_FROM": median_from,
+    "SALARY_TO": median_to,
+    "SALARY": median_salary})
+```
+
+```{python}
+df = df.withColumn("Average Salary",(col("SALARY_FROM")+col("SALARY_TO"))/2)
+```
+
+```{python}
+#parse
+export_cols = [
+    "EDUCATION_LEVELS_NAME",
+    "REMOTE_TYPE_NAME",
+    "MAX_YEARS_EXPERIENCE",
+    "Average_ Salary",
+    "LOT_V6_SPECIALIZED_OCCUPATION_NAME"
+]
+
+df_selected = df.select(*export_cols)
+```
+
