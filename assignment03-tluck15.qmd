@@ -71,6 +71,8 @@ grouped_df_pd = (
     .groupby("MIN_YEARS_EXPERIENCE")
     .agg(
         median_salary=("SALARY", "median"),
+        median_from=("SALARY_FROM", "median"),
+        median_to=("SALARY_TO", "median"),
         count=("ID", "count")
     )
     .reset_index()
