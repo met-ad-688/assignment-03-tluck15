@@ -57,27 +57,27 @@ df.show(5)
 ```
 
 ```{python}
-filtered_df = df.filter(col("SALARY").isNotNull() 
-                        & (col("SALARY") != 0) 
-                        & col("MIN_YEARS_EXPERIENCE").isNotNull() )
-filtered_df.show(30)
+df = (
+    df.withColumn("SALARY_FROM", col("SALARY_FROM").cast("float"))
+      .withColumn("SALARY_TO", col("SALARY_TO").cast("float"))
+      .withColumn("SALARY", col("SALARY").cast("float"))
+      .withColumn("MIN_YEARS_EXPERIENCE", col("MIN_YEARS_EXPERIENCE").cast("float"))
+      .withColumn("MAX_YEARS_EXPERIENCE", col("MAX_YEARS_EXPERIENCE").cast("float"))
+)
 ```
 
 ```{python}
-grouped_df_pd = filtered_df.toPandas()
+# define a method
+def compute_median(sdf,col_name):
+    q = sdf.approxQuantile(col_name,[0.5],0.01)
+    return q[0] if q else None
+```
 
-grouped_df_pd = (
-    grouped_df_pd
-    .groupby("MIN_YEARS_EXPERIENCE")
-    .agg(
-        median_salary=("SALARY", "median"),
-        median_from=("SALARY_FROM", "median"),
-        median_to=("SALARY_TO", "median"),
-        count=("ID", "count")
-    )
-    .reset_index()
-)
+```{python}
+median_from = compute_median(df,"SALARY_FROM")
+median_to = compute_median(df, "SALARY_TO")
+median_salary = compute_median(df, "SALARY")
 
-grouped_df_pd.head(20)
+print("medians: ", median_from, median_to, median_salary)
 ```
 
