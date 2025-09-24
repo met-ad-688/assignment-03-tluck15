@@ -153,3 +153,7 @@ fig = px.box(
 )
 ```
 
+```{python}
+fig.show()
+```
+
