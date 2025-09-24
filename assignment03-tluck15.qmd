@@ -14,10 +14,12 @@ format:
     theme: cerulean
     toc: true
     toc-depth: 2
-  docx: default
-  pdf: default
 date-modified: today
 date-format: long
+execute:
+  echo: false
+  eval: false
+  freeze: auto
 jupyter: python3
 ---
 
@@ -52,5 +54,28 @@ df.createOrReplaceTempView("job_postings")
 
 #df.printSchema() # comment this line when rendering the submission
 df.show(5)
+```
+
+```{python}
+filtered_df = df.filter(col("SALARY").isNotNull() 
+                        & (col("SALARY") != 0) 
+                        & col("MIN_YEARS_EXPERIENCE").isNotNull() )
+filtered_df.show(30)
+```
+
+```{python}
+grouped_df_pd = filtered_df.toPandas()
+
+grouped_df_pd = (
+    grouped_df_pd
+    .groupby("MIN_YEARS_EXPERIENCE")
+    .agg(
+        median_salary=("SALARY", "median"),
+        count=("ID", "count")
+    )
+    .reset_index()
+)
+
+grouped_df_pd.head(20)
 ```
 
