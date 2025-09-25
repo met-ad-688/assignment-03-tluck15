@@ -1,5 +1,5 @@
 ---
-title: Assignment 03
+title: Assignment
 author:
   - name: Taylor Luckenbill
     affiliations:
@@ -9,16 +9,20 @@ author:
         state: MA
 number-sections: true
 date: '2024-11-21'
+
 format:
   html:
     theme: cerulean
     toc: true
     toc-depth: 2
+  docx:
+    toc: true   # remove any reference-doc line if you don't have a template
+
 date-modified: today
 date-format: long
 execute:
-  echo: false
-  eval: false
+  echo: true
+  eval: true
   freeze: auto
 jupyter: python3
 ---
