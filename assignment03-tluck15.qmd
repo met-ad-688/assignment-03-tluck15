@@ -138,7 +138,7 @@ sorted_employment_types = median_salaries.sort_values(ascending=False).index
 ```
 
 ```{python}
-sorted["LOT_V6_SPECIALIZED_OCCUPATION_NAME"] = pd.Categorical(
+pdf["LOT_V6_SPECIALIZED_OCCUPATION_NAME"] = pd.Categorical(
     pdf["LOT_V6_SPECIALIZED_OCCUPATION_NAME"],
     categories=sorted_employment_types,
     ordered=True
@@ -162,7 +162,9 @@ print(df.columns)
 ```
 
 ```{python}
-df2 = df2.withColumn("counter", col("counter").cast("float"))
+from pyspark.sql.functions import lit
+
+df = df.withColumn("counter", lit(1))
 ```
 
 ```{python}
@@ -175,7 +177,7 @@ export_cols2 = [
 ```
 
 ```{python}
-df_selected2 = df2.select(export_cols2)
+df_selected2 = df.select(export_cols2)
 df_selected2.show(40)
 ```
 
@@ -217,7 +219,7 @@ fig2.update_layout(
 ```
 
 ```{python}
-df3 = df.withColumn(
+df = df.withColumn(
     "education_group",
     F.when(F.col("MIN_EDULEVELS_NAME").isin("GED", "Associate", "No Education Listed"), "Associate's or lower")
      .when(F.col("MIN_EDULEVELS_NAME") == "Bachelor's degree", "Bachelor's")
@@ -226,7 +228,57 @@ df3 = df.withColumn(
      .otherwise("Other")  # optional catch-all for unexpected values
 )
 
-df3.show()
+df.show()
 ```
 
+```{python}
+#parse
+export_cols3 = [
+    "LOT_V6_SPECIALIZED_OCCUPATION_NAME",
+    "Average Salary",
+    "MAX_YEARS_EXPERIENCE"
+]
+```
+
+```{python}
+df_selected3 = df.select(export_cols3)
+df_selected3.show(10)
+```
+
+```{python}
+pdf3 = df_selected3.toPandas()
+#pdf2.to_csv("./data/lighthouse_cleaned.csv", index=False)
+#print(len(pdf2))
+pdf3.head(10)
+```
+
+```{python}
+pdf3["MAX_YEARS_EXPERIENCE"] = pdf3["MAX_YEARS_EXPERIENCE"].fillna(0)
+pdf3.head(10)
+```
+
+```{python}
+import matplotlib.pyplot as plt
+```
+
+```{python}
+groups = pdf3["LOT_V6_SPECIALIZED_OCCUPATION_NAME"].unique()
+
+plt.figure(figsize=(10,6))
+
+for g in groups:
+    subset = pdf3[pdf3["LOT_V6_SPECIALIZED_OCCUPATION_NAME"] == g]
+    
+    # Add jitter to avoid overlapping points
+    x_jitter = subset["MAX_YEARS_EXPERIENCE"] + np.random.normal(0, 0.2, size=len(subset))
+    y_jitter = subset["Average Salary"] + np.random.normal(0, 0.2, size=len(subset))
+    
+    plt.scatter(x_jitter, y_jitter, alpha=0.6, label=g)
+
+plt.xlabel("X-axis (with jitter)")
+plt.ylabel("Y-axis (with jitter)")
+plt.title("Scatter Plots per Group with Jitter")
+plt.legend()
+plt.show()
+```
 
