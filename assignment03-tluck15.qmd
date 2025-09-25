@@ -216,3 +216,17 @@ fig2.update_layout(
 )
 ```
 
+```{python}
+df3 = df.withColumn(
+    "education_group",
+    F.when(F.col("MIN_EDULEVELS_NAME").isin("GED", "Associate", "No Education Listed"), "Associate's or lower")
+     .when(F.col("MIN_EDULEVELS_NAME") == "Bachelor's degree", "Bachelor's")
+     .when(F.col("MIN_EDULEVELS_NAME").isin("Master's degree"), "Master's")
+     .when(F.col("MIN_EDULEVELS_NAME").isin("PhD", "Doctorate", "professional degree"), "PhD")
+     .otherwise("Other")  # optional catch-all for unexpected values
+)
+
+df3.show()
+```
+
+
