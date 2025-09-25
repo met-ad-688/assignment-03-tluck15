@@ -138,7 +138,7 @@ sorted_employment_types = median_salaries.sort_values(ascending=False).index
 ```
 
 ```{python}
-pdf["LOT_V6_SPECIALIZED_OCCUPATION_NAME"] = pd.Categorical(
+sorted["LOT_V6_SPECIALIZED_OCCUPATION_NAME"] = pd.Categorical(
     pdf["LOT_V6_SPECIALIZED_OCCUPATION_NAME"],
     categories=sorted_employment_types,
     ordered=True
@@ -162,21 +162,69 @@ print(df.columns)
 ```
 
 ```{python}
+df2 = df.withColumn("counter", F.lit(1))
+```
+
+```{python}
 #parse
 export_cols2 = [
-    "ONET_NAME",
-    "Average Salary"
+    "LOT_V6_SPECIALIZED_OCCUPATION_NAME",
+    "Average Salary",
+    "counter"
 ]
 ```
 
 ```{python}
-df_selected2 = df.select(export_cols2)
+df_selected2 = df2.select(export_cols2)
 df_selected2.show(10)
 ```
 
 ```{python}
 pdf2 = df_selected2.toPandas()
 #pdf2.to_csv("./data/lighthouse_cleaned.csv", index=False)
-print(len(pdf2))
+#print(len(pdf2))
+pdf2.head()
+```
+
+```{python}
+median_salaries2 = pdf2.groupby("LOT_V6_SPECIALIZED_OCCUPATION_NAME").agg({
+    "Average Salary": "median",
+    "counter": "sum"
+}).reset_index()
+```
+
+```{python}
+#sorted_employment_types2 = median_salaries2.sort_values(ascending=False).index
+median_salaries2.head()
+```
+
+```{python}
+median_salaries2["LOT_V6_SPECIALIZED_OCCUPATION_NAME"] = pd.Categorical(
+    median_salaries2["LOT_V6_SPECIALIZED_OCCUPATION_NAME"],
+    categories=sorted_employment_types2,
+    ordered=True
+)
+```
+
+```{python}
+fig2 = px.scatter(
+    median_salaries2,
+    x="LOT_V6_SPECIALIZED_OCCUPATION_NAME",
+    y="Average Salary",
+    size="counter",
+    hover_name="LOT_V6_SPECIALIZED_OCCUPATION_NAME", 
+    size_max=60       
+)
+
+fig2.update_layout(
+    xaxis_title="Occupation",
+    yaxis_title="Median Salary",
+    title="Bubble Chart of Jobs: Median Salary vs. Occupation (Bubble = # Postings)",
+    xaxis_tickangle=45              # rotate labels if long
+)
+```
+
+```{python}
+fig2.show()
 ```
 
