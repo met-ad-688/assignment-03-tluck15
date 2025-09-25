@@ -173,3 +173,6 @@ lightcast_job_postings.csv
 lightcast_job_postings.csv
 lightcast_job_postings.csv
 lighthouse_cleaned.csv
+
+/.quarto/
+**/*.quarto_ipynb

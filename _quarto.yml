@@ -1,0 +1,22 @@
+project:
+  type: website
+
+website:
+  title: "Assignment"
+
+format:
+  html:
+    theme: cerulean
+    toc: true
+    toc-depth: 2
+  docx:
+    toc: true
+
+execute:
+  echo: false
+  eval: true
+  freeze: auto
+
+date-modified: today
+date-format: long
+jupyter: python3

@@ -1,0 +1,11 @@
+{
+  "hash": "de6e03dfffb83d4896210738465089f6",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: Assignment 03\nauthor:\n  - name: Taylor Luckenbill\n    affiliations:\n      - id: bu\n        name: Boston University\n        city: Boston\n        state: MA\nnumber-sections: true\ndate: '2024-11-21'\nformat:\n  html:\n    theme: cerulean\n    toc: true\n    toc-depth: 2\ndate-modified: today\ndate-format: long\nexecute:\n  echo: false\n  eval: false\n  freeze: auto\njupyter: python3\n---\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "supporting": [
+      "assignment03-tluck15_files"
+    ],
+    "filters": []
+  }
+}
