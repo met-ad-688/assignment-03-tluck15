@@ -162,7 +162,7 @@ print(df.columns)
 ```
 
 ```{python}
-df2 = df.withColumn("counter", F.lit(1))
+df2 = df2.withColumn("counter", col("counter").cast("float"))
 ```
 
 ```{python}
@@ -176,14 +176,14 @@ export_cols2 = [
 
 ```{python}
 df_selected2 = df2.select(export_cols2)
-df_selected2.show(10)
+df_selected2.show(40)
 ```
 
 ```{python}
 pdf2 = df_selected2.toPandas()
 #pdf2.to_csv("./data/lighthouse_cleaned.csv", index=False)
 #print(len(pdf2))
-pdf2.head()
+pdf2.head(30)
 ```
 
 ```{python}
@@ -196,14 +196,6 @@ median_salaries2 = pdf2.groupby("LOT_V6_SPECIALIZED_OCCUPATION_NAME").agg({
 ```{python}
 #sorted_employment_types2 = median_salaries2.sort_values(ascending=False).index
 median_salaries2.head()
-```
-
-```{python}
-median_salaries2["LOT_V6_SPECIALIZED_OCCUPATION_NAME"] = pd.Categorical(
-    median_salaries2["LOT_V6_SPECIALIZED_OCCUPATION_NAME"],
-    categories=sorted_employment_types2,
-    ordered=True
-)
 ```
 
 ```{python}
@@ -222,9 +214,5 @@ fig2.update_layout(
     title="Bubble Chart of Jobs: Median Salary vs. Occupation (Bubble = # Postings)",
     xaxis_tickangle=45              # rotate labels if long
 )
-```
-
-```{python}
-fig2.show()
 ```
 
