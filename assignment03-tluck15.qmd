@@ -157,3 +157,26 @@ fig = px.box(
 fig.show()
 ```
 
+```{python}
+print(df.columns) 
+```
+
+```{python}
+#parse
+export_cols2 = [
+    "ONET_NAME",
+    "Average Salary"
+]
+```
+
+```{python}
+df_selected2 = df.select(export_cols2)
+df_selected2.show(10)
+```
+
+```{python}
+pdf2 = df_selected2.toPandas()
+#pdf2.to_csv("./data/lighthouse_cleaned.csv", index=False)
+print(len(pdf2))
+```
+
