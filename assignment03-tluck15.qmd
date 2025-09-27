@@ -225,8 +225,9 @@ median_salaries2 = pdf2.groupby("LOT_V6_SPECIALIZED_OCCUPATION_NAME").agg({
 median_salaries2.head(3)
 ```
 ### Median average salaries by occupation with number of job postings as the size parameter
-The visual reveals the relative size differences of the job market. It is clear that data analyst is the biggest job pool and niche postings like marketing and healthcare analyst. The visual does not reveal differences in the salary ranges. This is due to the way missinf values using the median.
+The visual reveals the relative size differences of the job market. It is clear that data analyst is the biggest job pool and niche postings like marketing and healthcare analyst. The visual does not reveal differences in the salary ranges. This is due to the way missing values using the median.
 ```{python}
+#|echo: false
 fig2 = px.scatter(
     median_salaries2,
     x="LOT_V6_SPECIALIZED_OCCUPATION_NAME",
@@ -300,12 +301,13 @@ import matplotlib.pyplot as plt
 ```
 
 ```{python}
-groups = pdf3["LOT_V6_SPECIALIZED_OCCUPATION_NAME"].unique()
+#|echo: false
+groups = pdf3["MAX_YEARS_EXPERIENCE"].unique()
 
 plt.figure(figsize=(10,6))
 
 for g in groups:
-    subset = pdf3[pdf3["LOT_V6_SPECIALIZED_OCCUPATION_NAME"] == g]
+    subset = pdf3[pdf3["MAX_YEARS_EXPERIENCE"] == g]
     
     # Add jitter to avoid overlapping points
     x_jitter = subset["MAX_YEARS_EXPERIENCE"] + np.random.normal(0, 0.2, size=len(subset))
@@ -313,9 +315,9 @@ for g in groups:
     
     plt.scatter(x_jitter, y_jitter, alpha=0.6, label=g)
 
-plt.xlabel("X-axis (with jitter)")
-plt.ylabel("Y-axis (with jitter)")
-plt.title("Scatter Plots per Group with Jitter")
+plt.xlabel("minimum years experience")
+plt.ylabel("average salary")
+plt.title("salaries by years experience and education")
 plt.legend()
 plt.show()
 ```
