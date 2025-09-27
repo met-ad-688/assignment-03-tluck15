@@ -114,6 +114,8 @@ df = df.withColumn(
     regexp_replace(col("EDUCATION_LEVELS_NAME"), "[\n\r]", "")  
 )
 ```
+## Create a box and whisker plot to analyze variation across occupations.
+### Begin with more data prep
 Select the columns to maintain in the analysis
 ```{python}
 export_cols = [
@@ -140,7 +142,7 @@ pdf.to_csv("./data/lighthouse_cleaned.csv", index=False)
 #|echo: false
 print(len(pdf))
 ```
-
+Compute median salaries by group and sort the groups decending on median salaries.
 ```{python}
 median_salaries = pdf.groupby("LOT_V6_SPECIALIZED_OCCUPATION_NAME")["Average Salary"].median()
 ```
@@ -148,7 +150,7 @@ median_salaries = pdf.groupby("LOT_V6_SPECIALIZED_OCCUPATION_NAME")["Average Sal
 ```{python}
 sorted_employment_types = median_salaries.sort_values(ascending=False).index
 ```
-
+Make occupation a category and maintain group sorting.
 ```{python}
 pdf["LOT_V6_SPECIALIZED_OCCUPATION_NAME"] = pd.Categorical(
     pdf["LOT_V6_SPECIALIZED_OCCUPATION_NAME"],
@@ -156,7 +158,8 @@ pdf["LOT_V6_SPECIALIZED_OCCUPATION_NAME"] = pd.Categorical(
     ordered=True
 )
 ```
-
+### Variations in average salary by occupation name
+The occupations with the most variance look to include SAP Analyst/Admin, Data Analyst, and Oracle consultant/analyst.I think a  general but not definitive trend is that the occupations with higher variance seem to be those that are more generalized. For example SAP Analyst/Admin covers a broad spectrum of skills related to SAP from analyst to admin whereas healthcare analyst has less observable variance and is specific in both its role analyst only and the sector of work healthcare.
 ```{python}
 fig = px.box(
     pdf,
@@ -166,19 +169,26 @@ fig = px.box(
 ```
 
 ```{python}
+#|echo: false
 fig.show()
 ```
 
 ```{python}
+#|echo: false
 print(df.columns) 
 ```
 
 ```{python}
+## Differences in salary by occupation
+#|echo: false
 from pyspark.sql.functions import lit
-
+```
+### begin with data prep
+Create new column and assign 1 to each row so that it can be use for a record count by occupation later.
+```{python}
 df = df.withColumn("counter", lit(1))
 ```
-
+Select the fields needed for the analysis.
 ```{python}
 #parse
 export_cols2 = [
@@ -189,17 +199,18 @@ export_cols2 = [
 ```
 
 ```{python}
+#|echo: false
 df_selected2 = df.select(export_cols2)
 df_selected2.show(40)
 ```
-
+Trannsform pyspark data to pandas dataframe for visualization.
 ```{python}
 pdf2 = df_selected2.toPandas()
 #pdf2.to_csv("./data/lighthouse_cleaned.csv", index=False)
 #print(len(pdf2))
-pdf2.head(30)
+#pdf2.head(30)
 ```
-
+Group the median average salaries by occupation and sum the counts of each occupation. 
 ```{python}
 median_salaries2 = pdf2.groupby("LOT_V6_SPECIALIZED_OCCUPATION_NAME").agg({
     "Average Salary": "median",
@@ -208,9 +219,11 @@ median_salaries2 = pdf2.groupby("LOT_V6_SPECIALIZED_OCCUPATION_NAME").agg({
 ```
 
 ```{python}
+#|echo: false
 #sorted_employment_types2 = median_salaries2.sort_values(ascending=False).index
-median_salaries2.head()
+median_salaries2.head(3)
 ```
+### Median average salaries by occupation with number of job postings as the size parameter
 
 ```{python}
 fig2 = px.scatter(
