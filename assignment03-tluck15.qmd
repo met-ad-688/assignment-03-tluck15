@@ -29,7 +29,6 @@ jupyter: python3
 
 
 ```{python}
-#| echo: false
 import pandas as pd
 import plotly.express as px
 import plotly.io as pio
@@ -84,7 +83,6 @@ def compute_median(sdf,col_name):
 ```
 Compute the median of the df data frame on job_postings columns SALARY_FROM, SALARY_TO, SALARY.
 ```{python}
-#|echo: true
 median_from = compute_median(df,"SALARY_FROM")
 median_to = compute_median(df, "SALARY_TO")
 median_salary = compute_median(df, "SALARY")
@@ -93,23 +91,27 @@ median_salary = compute_median(df, "SALARY")
 #|eval: true
 print("medians: ", median_from, median_to, median_salary)
 ```
-
+Next fill the missing values in the SALARY_FROM, SALARY_TO, SALARY with the median values.
 ```{python}
+#|echo: true
 df = df.fillna({
     "SALARY_FROM": median_from,
     "SALARY_TO": median_to,
     "SALARY": median_salary})
 ```
-
+Calculate average salary by adding the min and max salaries and dividing by 2.
 ```{python}
+#|echo: true
 df = df.withColumn("Average Salary",(col("SALARY_FROM")+col("SALARY_TO"))/2)
 ```
 
 ```{python}
+#|eval: true
 print(df.columns) 
 ```
-
+Next remove extraneous charachters from education level names.
 ```{python}
+#|echo: true
 from pyspark.sql.functions import regexp_replace, col
 
 df = df.withColumn(
@@ -117,9 +119,10 @@ df = df.withColumn(
     regexp_replace(col("EDUCATION_LEVELS_NAME"), "[\n\r]", "")  
 )
 ```
-
+Select the columns to maintain in the analysis
 ```{python}
 #parse
+#|echo: true
 export_cols = [
     "EDUCATION_LEVELS_NAME",
     "REMOTE_TYPE_NAME",
@@ -130,10 +133,10 @@ export_cols = [
 
 
 ```
-
+`confirmed selected columns`
 ```{python}
 df_selected = df.select(export_cols)
-df_selected.show(10)
+df_selected.show(3)
 ```
 
 ```{python}
