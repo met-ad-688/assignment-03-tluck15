@@ -183,6 +183,7 @@ print(df.columns)
 #|echo: false
 from pyspark.sql.functions import lit
 ```
+## Create a scatterplot to review salary differences across occupation
 ### begin with data prep
 Create new column and assign 1 to each row so that it can be use for a record count by occupation later.
 ```{python}
@@ -201,7 +202,7 @@ export_cols2 = [
 ```{python}
 #|echo: false
 df_selected2 = df.select(export_cols2)
-df_selected2.show(40)
+#df_selected2.show(40)
 ```
 Trannsform pyspark data to pandas dataframe for visualization.
 ```{python}
@@ -224,7 +225,7 @@ median_salaries2 = pdf2.groupby("LOT_V6_SPECIALIZED_OCCUPATION_NAME").agg({
 median_salaries2.head(3)
 ```
 ### Median average salaries by occupation with number of job postings as the size parameter
-
+The visual reveals the relative size differences of the job market. It is clear that data analyst is the biggest job pool and niche postings like marketing and healthcare analyst. The visual does not reveal differences in the salary ranges. This is due to the way missinf values using the median.
 ```{python}
 fig2 = px.scatter(
     median_salaries2,
@@ -239,10 +240,12 @@ fig2.update_layout(
     xaxis_title="Occupation",
     yaxis_title="Median Salary",
     title="Bubble Chart of Jobs: Median Salary vs. Occupation (Bubble = # Postings)",
-    xaxis_tickangle=45              # rotate labels if long
+    xaxis_tickangle=90              # rotate labels if long
 )
 ```
-
+## visualizing salary by education
+### begin with data prep
+Group the data in MIN_EDULEVELS_NAME into five groups: Associates or Lower, Bachelors, Masters, Professional, Other.
 ```{python}
 df = df.withColumn(
     "education_group",
@@ -253,36 +256,46 @@ df = df.withColumn(
      .otherwise("Other")  # optional catch-all for unexpected values
 )
 
-df.show()
 ```
-
+```{python}
+#|echo: false
+df.show(3)
+```
+Extract columns needed for the analysis.
 ```{python}
 #parse
 export_cols3 = [
-    "LOT_V6_SPECIALIZED_OCCUPATION_NAME",
+    "education_group",
     "Average Salary",
     "MAX_YEARS_EXPERIENCE"
 ]
 ```
 
 ```{python}
+#|echo: false
 df_selected3 = df.select(export_cols3)
-df_selected3.show(10)
+#df_selected3.show(10)
 ```
 
 ```{python}
+#|echo: false
 pdf3 = df_selected3.toPandas()
 #pdf2.to_csv("./data/lighthouse_cleaned.csv", index=False)
 #print(len(pdf2))
 pdf3.head(10)
 ```
-
+Fill missing values with 0 if max years experience is empty.
 ```{python}
 pdf3["MAX_YEARS_EXPERIENCE"] = pdf3["MAX_YEARS_EXPERIENCE"].fillna(0)
+
+```
+```{python}
+#|echo: false
 pdf3.head(10)
 ```
 
 ```{python}
+#|echo: false
 import matplotlib.pyplot as plt
 ```
 
