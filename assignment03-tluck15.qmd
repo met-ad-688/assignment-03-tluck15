@@ -29,6 +29,7 @@ jupyter: python3
 
 
 ```{python}
+#|echo: false
 import pandas as pd
 import plotly.express as px
 import plotly.io as pio
@@ -42,7 +43,7 @@ from pyspark.sql.functions import col, monotonically_increasing_id
 ```
 
 ```{python}
-
+#|echo: false
 np.random.seed(2)
 
 pio.renderers.default = "notebook"
@@ -66,7 +67,6 @@ In order to complete the analysis the first step is to load and prepare the data
 
 For the data set job_postings save as df and change the columns SALARY_FROM, SALARY_TO, SALARY, MIN_YEARS_EXPERIENCE, and MAX_YEARS_EXPERIENCE to type float.
 ```{python}
-#| echo: true
 df = (
     df.withColumn("SALARY_FROM", col("SALARY_FROM").cast("float"))
       .withColumn("SALARY_TO", col("SALARY_TO").cast("float"))
@@ -86,12 +86,11 @@ median_to = compute_median(df, "SALARY_TO")
 median_salary = compute_median(df, "SALARY")
 ```
 ```{python}
-#|eval: true
+#|echo: false
 print("medians: ", median_from, median_to, median_salary)
 ```
 Next fill the missing values in the SALARY_FROM, SALARY_TO, SALARY with the median values.
 ```{python}
-#|echo: true
 df = df.fillna({
     "SALARY_FROM": median_from,
     "SALARY_TO": median_to,
@@ -99,17 +98,15 @@ df = df.fillna({
 ```
 Calculate average salary by adding the min and max salaries and dividing by 2.
 ```{python}
-#|echo: true
 df = df.withColumn("Average Salary",(col("SALARY_FROM")+col("SALARY_TO"))/2)
 ```
 
 ```{python}
-#|eval: true
+#|echo: false
 print(df.columns) 
 ```
-Next remove extraneous charachters from education level names.
+Next remove extraneous characters from education level names.
 ```{python}
-#|echo: true
 from pyspark.sql.functions import regexp_replace, col
 
 df = df.withColumn(
@@ -119,8 +116,6 @@ df = df.withColumn(
 ```
 Select the columns to maintain in the analysis
 ```{python}
-#parse
-#|echo: true
 export_cols = [
     "EDUCATION_LEVELS_NAME",
     "REMOTE_TYPE_NAME",
@@ -136,10 +131,13 @@ export_cols = [
 df_selected = df.select(export_cols)
 df_selected.show(3)
 ```
-
+Transform pyspark data into pandas dataframe from visualization.
 ```{python}
 pdf = df_selected.toPandas()
 pdf.to_csv("./data/lighthouse_cleaned.csv", index=False)
+```
+```{python}
+#|echo: false
 print(len(pdf))
 ```
 
