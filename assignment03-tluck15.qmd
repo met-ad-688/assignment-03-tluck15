@@ -299,26 +299,24 @@ pdf3.head(10)
 #|echo: false
 import matplotlib.pyplot as plt
 ```
-
+The visual below looks at the relationship between minimum years experience, average salary, and education group. The first thing that is visible is that the most of jobs require 0-1 years of minimum experience. The callout here is that any null values were replaced with 0. However, I think this general trend aligns with what is observable on any job posting website. The nature of an organization suggests a n arrowing of positions as the requirements expand (year experience). Irrespective of whether you have no degree or a master's degree, there will always be a need for a first job. The other interesting observation is that jobs with high degree requirements tend to be the jobs with the most minimum years experience requirements. There also is an observable upward salary trend line as the minimum years experience gets larger and the variance in salary becomes tighter.
 ```{python}
 #|echo: false
-groups = pdf3["MAX_YEARS_EXPERIENCE"].unique()
-
 plt.figure(figsize=(10,6))
 
-for g in groups:
-    subset = pdf3[pdf3["MAX_YEARS_EXPERIENCE"] == g]
-    
-    # Add jitter to avoid overlapping points
+# group by education_group instead of max years experience
+for edu, subset in pdf3.groupby("education_group"):
+    # avoid overlapping points with jitter
     x_jitter = subset["MAX_YEARS_EXPERIENCE"] + np.random.normal(0, 0.2, size=len(subset))
     y_jitter = subset["Average Salary"] + np.random.normal(0, 0.2, size=len(subset))
     
-    plt.scatter(x_jitter, y_jitter, alpha=0.6, label=g)
+    plt.scatter(x_jitter, y_jitter, alpha=0.6, label=edu)
 
-plt.xlabel("minimum years experience")
-plt.ylabel("average salary")
-plt.title("salaries by years experience and education")
-plt.legend()
+plt.xlabel("Minimum Years Experience")
+plt.ylabel("Average Salary")
+plt.title("Salaries by Years Experience and Education Group")
+plt.legend(title="Education Group")
 plt.show()
+
 ```
 
