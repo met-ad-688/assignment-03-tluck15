@@ -1,8 +1,8 @@
 {
-  "hash": "bb806b7ab9644d64e0ec0a664002b71d",
+  "hash": "e280d7627932028ef246391c990e9807",
   "result": {
     "engine": "jupyter",
-    "markdown": "---\ntitle: Assignment 03\nauthor:\n  - name: Taylor Luckenbill\n    affiliations:\n      - id: bu\n        name: Boston University\n        city: Boston\n        state: MA\nnumber-sections: true\ndate: '2025-09-22'\n\nformat:\n  html:\n    theme: cerulean\n    toc: true\n    toc-depth: 2\n  docx:\n    toc: true   # remove any reference-doc line if you don't have a template\n\ndate-modified: today\ndate-format: long\nexecute:\n  echo: false\n  eval: false\n  freeze: auto\njupyter: python3\n---\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "markdown": "---\ntitle: Assignment 03\nauthor:\n  - name: Taylor Luckenbill\n    affiliations:\n      - id: bu\n        name: Boston University\n        city: Boston\n        state: MA\nnumber-sections: true\ndate: '2025-09-22'\n\nformat:\n  html:\n    theme: cerulean\n    toc: true\n    toc-depth: 2\n  docx:\n    toc: true   # remove any reference-doc line if you don't have a template\n\ndate-modified: today\ndate-format: long\nexecute:\n  echo: false\n  eval: false\n  freeze: auto\njupyter: python3\n---\n\n\n\n\n\n# Analysis Objective\n## Data Preparation Activities\n`In order to complete the analysis the first step is to load and prepare the data. For this analysis I will update data types, calculate an average salary, remove extraneous charachters from relevant data text, and replace null values.`\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
     "supporting": [
       "assignment03-tluck15_files/figure-docx"
     ],

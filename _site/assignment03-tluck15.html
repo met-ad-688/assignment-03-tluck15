@@ -22,6 +22,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -81,8 +116,17 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="assignment03-tluck15.docx"><i class="bi bi-file-word"></i>MS Word</a></li></ul></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#analysis-objective" id="toc-analysis-objective" class="nav-link active" data-scroll-target="#analysis-objective"><span class="header-section-number">1</span> Analysis Objective</a>
+  <ul class="collapse">
+  <li><a href="#data-preparation-activities" id="toc-data-preparation-activities" class="nav-link" data-scroll-target="#data-preparation-activities"><span class="header-section-number">1.1</span> Data Preparation Activities</a></li>
+  </ul></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="assignment03-tluck15.docx"><i class="bi bi-file-word"></i>MS Word</a></li></ul></div></nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -130,8 +174,34 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="analysis-objective" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Analysis Objective</h1>
+<section id="data-preparation-activities" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="data-preparation-activities"><span class="header-section-number">1.1</span> Data Preparation Activities</h2>
+<p>In order to complete the analysis the first step is to load and prepare the data. For this analysis I will update data types, calculate average salary, remove extraneous characters from relevant data text, and replace null values.</p>
+<p>For the data set job_postings save as df and change the columns SALARY_FROM, SALARY_TO, SALARY, MIN_YEARS_EXPERIENCE, and MAX_YEARS_EXPERIENCE to type float.</p>
+<div id="5fbc59c7" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> (</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    df.withColumn(<span class="st">"SALARY_FROM"</span>, col(<span class="st">"SALARY_FROM"</span>).cast(<span class="st">"float"</span>))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>      .withColumn(<span class="st">"SALARY_TO"</span>, col(<span class="st">"SALARY_TO"</span>).cast(<span class="st">"float"</span>))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>      .withColumn(<span class="st">"SALARY"</span>, col(<span class="st">"SALARY"</span>).cast(<span class="st">"float"</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      .withColumn(<span class="st">"MIN_YEARS_EXPERIENCE"</span>, col(<span class="st">"MIN_YEARS_EXPERIENCE"</span>).cast(<span class="st">"float"</span>))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>      .withColumn(<span class="st">"MAX_YEARS_EXPERIENCE"</span>, col(<span class="st">"MAX_YEARS_EXPERIENCE"</span>).cast(<span class="st">"float"</span>))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Next the median needs to be calculated as it will be used to fill na values. Create a new method called compute_median.</p>
+<p>Compute the median of the df data frame on job_postings columns SALARY_FROM, SALARY_TO, SALARY.</p>
+<div id="4f651be3" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>median_from <span class="op">=</span> compute_median(df,<span class="st">"SALARY_FROM"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>median_to <span class="op">=</span> compute_median(df, <span class="st">"SALARY_TO"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>median_salary <span class="op">=</span> compute_median(df, <span class="st">"SALARY"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"medians: "</span>, median_from, median_to, median_salary)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

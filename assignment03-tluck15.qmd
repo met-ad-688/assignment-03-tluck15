@@ -60,8 +60,13 @@ df.createOrReplaceTempView("job_postings")
 #df.printSchema() # comment this line when rendering the submission
 df.show(5)
 ```
+# Analysis Objective
+## Data Preparation Activities
+In order to complete the analysis the first step is to load and prepare the data. For this analysis I will update data types, calculate average salary, remove extraneous characters from relevant data text, and replace null values.
 
+For the data set job_postings save as df and change the columns SALARY_FROM, SALARY_TO, SALARY, MIN_YEARS_EXPERIENCE, and MAX_YEARS_EXPERIENCE to type float.
 ```{python}
+#| echo: true
 df = (
     df.withColumn("SALARY_FROM", col("SALARY_FROM").cast("float"))
       .withColumn("SALARY_TO", col("SALARY_TO").cast("float"))
@@ -70,19 +75,22 @@ df = (
       .withColumn("MAX_YEARS_EXPERIENCE", col("MAX_YEARS_EXPERIENCE").cast("float"))
 )
 ```
-
+Next the median needs to be calculated as it will be used to fill na values. Create a new method called compute_median. 
 ```{python}
 # define a method
 def compute_median(sdf,col_name):
     q = sdf.approxQuantile(col_name,[0.5],0.01)
     return q[0] if q else None
 ```
-
+Compute the median of the df data frame on job_postings columns SALARY_FROM, SALARY_TO, SALARY.
 ```{python}
+#|echo: true
 median_from = compute_median(df,"SALARY_FROM")
 median_to = compute_median(df, "SALARY_TO")
 median_salary = compute_median(df, "SALARY")
-
+```
+```{python}
+#|eval: true
 print("medians: ", median_from, median_to, median_salary)
 ```
 
