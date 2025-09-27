@@ -76,13 +76,9 @@ df = (
 ```
 Next the median needs to be calculated as it will be used to fill na values. Create a new method called compute_median. 
 ```{python}
-# define a method
 def compute_median(sdf,col_name):
     q = sdf.approxQuantile(col_name,[0.5],0.01)
     return q[0] if q else None
-```
-Compute the median of the df data frame on job_postings columns SALARY_FROM, SALARY_TO, SALARY.
-```{python}
 
 median_from = compute_median(df,"SALARY_FROM")
 median_to = compute_median(df, "SALARY_TO")
